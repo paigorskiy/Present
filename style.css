@@ -1,4 +1,5 @@
 body {
+    background-color: #ffebcd; /* Нежный бежевый */
     background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
     text-align: center;
     font-family: 'Arial', sans-serif;
@@ -45,8 +46,4 @@ h1 {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-body {
-    background-color: #ffebcd; /* Нежный бежевый */
 }
