@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С 8 Марта!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            transition: background-color 0.5s;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal-header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px 8px 0 0;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .terminal-buttons {
+            display: flex;
+        }
+        
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+        
+        .btn-red {
+            background-color: #ff5f57;
+        }
+        
+        .btn-yellow {
+            background-color: #febc2e;
+        }
+        
+        .btn-green {
+            background-color: #28c840;
+        }
+        
+        .terminal-body {
+            background-color: #282a36;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            font-size: 14px;
+            margin-bottom: 30px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #e8658a;
+            font-size: 2.5em;
+        }
+        
+        .message {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .message::before {
+            content: '/* ';
+            color: #999;
+        }
+        
+        .message::after {
+            content: ' */';
+            color: #999;
+        }
+        
+        .greeting {
+            color: #e8658a;
+            font-weight: bold;
+        }
+        
+        .function-title {
+            color: #61afef;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .canvas-container {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        canvas {
+            display: block;
+            background-color: #fff;
+        }
+        
+        .toggle-section {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .toggle-btn {
+            background-color: #e8658a;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            transition: transform 0.2s, background-color 0.2s;
+            margin: 10px;
+        }
+        
+        .toggle-btn:hover {
+            transform: translateY(-3px);
+            background-color: #d14d73;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .flower-container {
+            text-align: center;
+            margin: 30px 0;
+            perspective: 1000px;
+        }
+        
+        .flower {
+            display: inline-block;
+            font-size: 2em;
+            animation: bloom 3s infinite alternate;
+            transition: transform 0.5s;
+            cursor: pointer;
+        }
+        
+        .flower:hover {
+            transform: scale(1.5) rotate(15deg);
+        }
+        
+        @keyframes bloom {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+            100% {
+                transform: scale(1.2) rotate(5deg);
+            }
+        }
+        
+        .heart {
+            color: #e8658a;
+            animation: pulse 1.5s infinite;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .snowflake {
+            position: absolute;
+            background-color: #e8658a;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .dark-mode {
+            background-color: #202124;
+            color: #e8eaed;
+        }
+        
+        .dark-mode .container {
+            background-color: #282a36;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        .dark-mode .message {
+            background-color: #3c3f51;
+            color: #f8f8f2;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+        }
+        
+        .dark-mode h1, .dark-mode .greeting {
+            color: #ff79c6;
+        }
+        
+        .dark-mode .toggle-btn {
+            background-color: #ff79c6;
+        }
+        
+        .dark-mode .toggle-btn:hover {
+            background-color: #f54eae;
+        }
+        
+        .dark-mode .heart {
+            color: #ff79c6;
+        }
+        
+        .countdown {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+        
+        .countdown span {
+            color: #e8658a;
+            font-weight: bold;
+        }
+        
+        .dark-mode .countdown span {
+            color: #ff79c6;
+        }
+        
+        .pixel-heart {
+            margin: 30px auto;
+            width: 210px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .pixel {
+            width: 30px;
+            height: 30px;
+            background-color: transparent;
+            transition: background-color 0.3s;
+        }
+        
+        .pixel.filled {
+            background-color: #e8658a;
+        }
+        
+        .dark-mode .pixel.filled {
+            background-color: #ff79c6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="terminal-header">
+            <span>bash ~ holiday_greeting.sh</span>
+            <div class="terminal-buttons">
+                <div class="terminal-btn btn-red"></div>
+                <div class="terminal-btn btn-yellow"></div>
+                <div class="terminal-btn btn-green"></div>
+            </div>
+        </div>
+        <div class="terminal-body" id="terminal">$ npm run celebrate
+> Initializing celebration script...
+> Checking holidays database...
+> Found: International Women's Day (March 8)
+> Generating special greeting...
+> Loading style components...
+> Success! Celebration ready.
+$ ./render_greeting.py --special-person="true" --celebration="8Березня"</div>
+        
+        <h1>З 8 Березня!<span class="heart">❤</span></h1>
+        
+        <div class="message">
+            Привіт! Ти неймовірно красива, чарівна, прекрасна – і я можу говорити це вічно! Бажаю здійснення всіх твоїх мрій, весняного настрою та щоб твоя тепла усмішка завжди зачаровувала і дарувала радість усім навколо. 
+            Усміхайся частіше, адже твоя усмішка – це справжня магія, яка освітлює цей світ! 
+            З любов’ю і найкращими побажаннями! 💕🌸
+        </div>
+        
+        <div class="countdown" id="countdown">
+            <p>До 8 Березня залишилося: <span id="days">0</span> днів, <span id="hours">0</span> годин, <span id="minutes">0</span> хвилин і <span id="seconds">0</span> секунд</p>
+        </div>
+        
+        <div class="function-title">function createFlower() {</div>
+        
+        <div class="flower-container">
+            <span class="flower" onclick="this.textContent = '🌸'">🌷</span>
+            <span class="flower" onclick="this.textContent = '🌹'">🌺</span>
+            <span class="flower" onclick="this.textContent = '🌼'">🌻</span>
+            <span class="flower" onclick="this.textContent = '🌸'">🌷</span>
+            <span class="flower" onclick="this.textContent = '🌹'">🌺</span>
+        </div>
+        
+        <div class="function-title">}</div>
+        
+
+        
+        <div class="function-title">function createPixelArt() {</div>
+        
+        <div class="pixel-heart" id="pixelHeart"></div>
+        
+        <div class="function-title">}</div>
+        
+        <div class="toggle-section">
+            <button class="toggle-btn" id="snowBtn">Включити ефект конфетті</button>
+            <button class="toggle-btn" id="toggleMode">Переключити тему</button>
+        </div>
+        
+        <footer>
+            <p>Створено с <span class="heart">❤</span> та кодом у 2025 році | v 1.0.8-release</p>
+            <p>const dev = { name: 'anoNikus', isInLove: true };</p>
+        </footer>
+    </div>
+
+    <script>
+        // Терминал с эффектом печати
+        const terminalText = document.getElementById('terminal').textContent;
+        document.getElementById('terminal').textContent = "";
+        let i = 0;
+        
+        function typeWriter() {
+            if (i < terminalText.length) {
+                document.getElementById('terminal').textContent += terminalText.charAt(i);
+                i++;
+                setTimeout(typeWriter, Math.random() * 30 + 10);
+            }
+        }
+        
+        typeWriter();
+        
+
+        
+        // Обратный отсчет до 8 Марта
+        function updateCountdown() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const marchEight = new Date(currentYear, 2, 8); // Месяцы начинаются с 0, поэтому 2 = март
+            
+            // Если 8 марта этого года уже прошло, считаем до следующего года
+            if (now > marchEight) {
+                marchEight.setFullYear(currentYear + 1);
+            }
+            
+            const timeDiff = marchEight - now;
+            
+            // Расчет оставшегося времени
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            
+            // Обновление элементов
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // Эффект конфетти
+        let showSnow = false;
+        const snowflakes = [];
+        
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            
+            // Случайный размер и позиция
+            const size = Math.random() * 10 + 5;
+            const startPositionX = Math.random() * window.innerWidth;
+            
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+            snowflake.style.left = `${startPositionX}px`;
+            snowflake.style.top = '0px';
+            
+            // Случайный цвет
+            const colors = ['#ffb6c1', '#e8658a', '#ff69b4', '#ffc0cb', '#ff1493'];
+            snowflake.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            document.body.appendChild(snowflake);
+            
+            // Анимация падения
+            const speed = Math.random() * 3 + 2;
+            const horizontalMovement = Math.random() * 2 - 1; // Випадкове зміщення вліво або вправо
+            
+            return {
+                element: snowflake,
+                speed: speed,
+                horizontalMovement: horizontalMovement,
+                positionY: 0,
+                positionX: startPositionX
+            };
+        }
+        
+        function moveSnowflakes() {
+            for (let i = 0; i < snowflakes.length; i++) {
+                const snowflake = snowflakes[i];
+                snowflake.positionY += snowflake.speed;
+                snowflake.positionX += snowflake.horizontalMovement;
+                
+                snowflake.element.style.top = `${snowflake.positionY}px`;
+                snowflake.element.style.left = `${snowflake.positionX}px`;
+                
+                // Удаление снежинок, которые вышли за пределы экрана
+                if (snowflake.positionY > window.innerHeight) {
+                    document.body.removeChild(snowflake.element);
+                    snowflakes.splice(i, 1);
+                    i--;
+                }
+            }
+            
+            // Добавление новых снежинок
+            if (showSnow && snowflakes.length < 50) {
+                snowflakes.push(createSnowflake());
+            }
+            
+            if (showSnow || snowflakes.length > 0) {
+                requestAnimationFrame(moveSnowflakes);
+            }
+        }
+        
+        // Переключение эффекта конфетти
+        document.getElementById('snowBtn').addEventListener('click', function() {
+            showSnow = !showSnow;
+            this.textContent = showSnow ? 'Вимкнути ефект конфетті' : 'Включити ефект конфетті';
+            
+            if (showSnow) {
+                moveSnowflakes();
+            }
+        });
+        
+        // Переключение темной темы
+        document.getElementById('toggleMode').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            this.textContent = document.body.classList.contains('dark-mode') ? 'Світла тема' : 'Темна тема';
+        });
+        
+
+        
+        // Создание пиксельного сердца с интерактивными возможностями
+        const pixelHeart = document.getElementById('pixelHeart');
+        const pixelRows = 7;
+        const pixelCols = 7;
+        const heartPattern = [
+            0, 1, 0, 1, 0, 0, 0,
+            1, 1, 1, 1, 1, 0, 0,
+            1, 1, 1, 1, 1, 1, 0,
+            1, 1, 1, 1, 1, 1, 0,
+            0, 1, 1, 1, 1, 0, 0,
+            0, 0, 1, 1, 0, 0, 0,
+            0, 0, 0, 1, 0, 0, 0
+        ];
+        
+        // Создаем матрицу для хранения текущего состояния
+        let currentPattern = [...heartPattern];
+        let colors = ['#e8658a', '#ff69b4', '#ff1493', '#ff3366', '#d14d73'];
+        
+        // Создаем панель управления
+        const controlPanel = document.createElement('div');
+        controlPanel.style.display = 'flex';
+        controlPanel.style.justifyContent = 'center';
+        controlPanel.style.margin = '10px 0';
+        
+        // Кнопка для сброса к исходному сердцу
+        const resetBtn = document.createElement('button');
+        resetBtn.textContent = 'Скинути';
+        resetBtn.className = 'toggle-btn';
+        resetBtn.style.marginRight = '10px';
+        
+        // Кнопка для случайной расцветки
+        const randomColorBtn = document.createElement('button');
+        randomColorBtn.textContent = 'Випадкові кольори';
+        randomColorBtn.className = 'toggle-btn';
+        
+        // Кнопка для анимации пульсации
+        const pulseBtn = document.createElement('button');
+        pulseBtn.textContent = 'Анімувати';
+        pulseBtn.className = 'toggle-btn';
+        pulseBtn.style.marginLeft = '10px';
+        
+        // Добавляем кнопки на панель
+        controlPanel.appendChild(resetBtn);
+        controlPanel.appendChild(randomColorBtn);
+        controlPanel.appendChild(pulseBtn);
+        
+        // Добавляем панель управления перед pixelHeart
+        pixelHeart.parentNode.insertBefore(controlPanel, pixelHeart);
+        
+        // Функция создания пикселей
+        function createPixels() {
+            // Очищаем текущие пиксели
+            pixelHeart.innerHTML = '';
+            
+            for (let i = 0; i < currentPattern.length; i++) {
+                const pixel = document.createElement('div');
+                pixel.classList.add('pixel');
+                pixel.dataset.index = i;
+                
+                if (currentPattern[i] === 1) {
+                    pixel.classList.add('filled');
+                    // Добавим случайный цвет из палитры, если выбраны случайные цвета
+                    if (randomColorsEnabled) {
+                        pixel.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    }
+                }
+                
+                // Добавляем обработчик клика для переключения состояния
+                pixel.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    if (currentPattern[index] === 0) {
+                        currentPattern[index] = 1;
+                        this.classList.add('filled');
+                        // Выбираем случайный цвет из палитры
+                        this.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    } else {
+                        currentPattern[index] = 0;
+                        this.classList.remove('filled');
+                        this.style.backgroundColor = '';
+                    }
+                });
+                
+                // Добавляем hover эффект
+                pixel.addEventListener('mouseover', function() {
+                    if (!currentPattern[parseInt(this.dataset.index)]) {
+                        this.style.backgroundColor = '#ffecf1';
+                    }
+                });
+                
+                pixel.addEventListener('mouseout', function() {
+                    if (!currentPattern[parseInt(this.dataset.index)]) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+                
+                pixelHeart.appendChild(pixel);
+            }
+        }
+        
+        // Переменные для управления режимами
+        let randomColorsEnabled = false;
+        let pulseAnimationEnabled = false;
+        let pulseInterval;
+        
+        // Обработчик для кнопки сброса
+        resetBtn.addEventListener('click', function() {
+            currentPattern = [...heartPattern];
+            randomColorsEnabled = false;
+            stopPulseAnimation();
+            createPixels();
+        });
+        
+        // Обработчик для кнопки случайных цветов
+        randomColorBtn.addEventListener('click', function() {
+            randomColorsEnabled = !randomColorsEnabled;
+            this.textContent = randomColorsEnabled ? 'Стандартний колір' : 'Випадкові кольори';
+            
+            if (randomColorsEnabled) {
+                // Применяем случайные цвета ко всем заполненным пикселям
+                document.querySelectorAll('.pixel.filled').forEach(pixel => {
+                    pixel.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                });
+            } else {
+                // Возвращаем стандартный цвет
+                document.querySelectorAll('.pixel.filled').forEach(pixel => {
+                    pixel.style.backgroundColor = '';
+                });
+            }
+        });
+        
+        // Функция для анимации пульсации
+        function startPulseAnimation() {
+            let scale = 1;
+            let growing = true;
+            
+            pulseInterval = setInterval(() => {
+                if (growing) {
+                    scale += 0.02;
+                    if (scale >= 1.1) growing = false;
+                } else {
+                    scale -= 0.02;
+                    if (scale <= 0.9) growing = true;
+                }
+                
+                pixelHeart.style.transform = `scale(${scale})`;
+            }, 50);
+        }
+        
+        function stopPulseAnimation() {
+            clearInterval(pulseInterval);
+            pixelHeart.style.transform = 'scale(1)';
+            pulseAnimationEnabled = false;
+            pulseBtn.textContent = 'Анімувати';
+        }
+        
+        // Обработчик для кнопки анимации
+        pulseBtn.addEventListener('click', function() {
+            pulseAnimationEnabled = !pulseAnimationEnabled;
+            
+            if (pulseAnimationEnabled) {
+                this.textContent = 'Зупинити';
+                startPulseAnimation();
+            } else {
+                stopPulseAnimation();
+            }
+        });
+        
+        // Инициализация пикселей
+        createPixels();
+    </script>
+</body>
+</html>

@@ -1,49 +1,190 @@
-body {
-    background-color: #ffebcd; /* Нежный бежевый */
-    background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
-    text-align: center;
-    font-family: 'Arial', sans-serif;
-    color: #6a0572;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: transform 2s ease-in-out, opacity 2s ease-in-out;
+}
+
+.background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Контейнер */
 .container {
-    margin-top: 50px;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  perspective: 1000px;
 }
 
-h1 {
-    font-size: 2.5rem;
-    animation: fadeIn 2s ease-in-out;
+.left-section, .right-section {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.subtext {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    animation: fadeIn 3s ease-in-out;
+/* Хом'ячок */
+.hamster-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.hanging-items {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    margin-top: 50px;
+.hamster {
+  width: 200px;
+  height: auto;
+  border-radius: 20px;
+  object-fit: cover;
+  filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.3));
+  opacity: 0;
+  transform: translateX(100vw) scale(0.5) rotateX(0deg);
+  animation: hamsterJump 1.5s ease-in-out forwards;
 }
 
-.item {
-    font-size: 3rem;
-    cursor: pointer;
-    position: relative;
-    animation: swing 2s infinite ease-in-out alternate;
+/* Кнопки вибору хом'ячка */
+.hamster-options {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInButtons 1.5s ease-in-out forwards 1s;
 }
 
-@keyframes swing {
-    0% { transform: rotate(-5deg); }
-    100% { transform: rotate(5deg); }
+.hamster-options button {
+  font-size: 20px;
+  padding: 10px;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s, background 0.3s;
+}
+
+.hamster-options button:hover {
+  background: #f0f0f0;
+  transform: scale(1.1);
+}
+
+/* Форма входу */
+.login-box {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeIn 1.5s ease-in-out forwards 0.5s;
+}
+
+.login-box h2 {
+  font-size: 24px;
+  color: black;
+  margin-bottom: 20px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #f9f9f9;
+  color: black;
+}
+
+/* Эффект свечения для активного поля ввода */
+.login-box input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+  outline: none;
+}
+
+/* Кнопка "Увійти" */
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.5s ease-in-out, background 0.3s, box-shadow 0.3s;
+}
+
+.login-btn:hover {
+  transform: scale(1.1);
+  background: #3e8e41;
+  box-shadow: 0px 0px 15px rgba(0, 255, 0, 0.5);
+}
+
+/* Посилання "Забули пароль" */
+.forgot-password {
+  display: block;
+  margin-top: 10px;
+  color: #555;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Анімація */
+@keyframes hamsterJump {
+  0% {
+    opacity: 0;
+    transform: translateX(100vw) scale(0.5) rotateX(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(50vw) scale(1.2) rotateX(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1) rotateX(360deg);
+  }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInButtons {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
